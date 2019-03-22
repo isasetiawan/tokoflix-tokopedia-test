@@ -13,9 +13,10 @@ export default new Router({
       component: Home,
       async beforeEnter(to, from, next){
         await store.dispatch('loadUser')
-        await store.dispatch('loadMovies')
+        await store.dispatch('loadMovies',{page:to.query.page})
         next()
       },
+      
       children:[]
     }
   ]
