@@ -103,9 +103,39 @@
         </div>
 
 
+        <section class="hero is-primary is-bold" v-if="similarMovies.length > 0">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">
+                    Similar Movies
+                </h1>
+                <h2 class="subtitle">
+                     List of movie that similar to {{movie.title}}
+                </h2>
+                </div>
+            </div>
+        </section>
+
         <div class="section">
-            <p class="title">Similar Movies</p>
             <Movies :movieList="similarMovies"/>
+        </div>
+
+        <section class="hero is-primary is-bold" v-if="recommendationMovies.length > 0">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">
+                    Recommended Movies
+                </h1>
+                <h2 class="subtitle">
+                     Some recomendation movie from {{movie.title}}
+                </h2>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="section">
+            <Movies :movieList="recommendationMovies"/>
         </div>
 
         
@@ -125,6 +155,7 @@ export default {
         await this.loadMovie({id:movieId})
         await this.loadCasts()
         await this.loadSimilarMovie()
+        await this.loadRecommendationMovies()
         next()
     },
     async created(){
@@ -133,20 +164,23 @@ export default {
         await this.loadMovie({id:movieId})
         await this.loadCasts()
         await this.loadSimilarMovie()
+        await this.loadRecommendationMovies()
     },
     methods:{
         ...mapActions([
             'loadMovie',
             'loadCasts',
             'purchaseMovie',
-            'loadSimilarMovie'
+            'loadSimilarMovie',
+            'loadRecommendationMovies'
         ]),
     },
     computed:{
         ...mapState({
             movie: state => state.movie,
             casts: state => state.casts,
-            similarMovies: state => state.similarMovies
+            similarMovies: state => state.similarMovies,
+            recommendationMovies: state => state.recommendationMovies
         }),
         ...mapGetters(['moviePrice','movieInCart'])
     },
