@@ -2,11 +2,6 @@
   <div>
 
     <div class="section">
-      <div><b>Balance:</b></div>
-      <div class="is-size-4">{{$store.state.balance | currency}}</div>
-    </div>
-
-    <div class="section">
       <div class="columns is-multiline">
         <div class="column is-one-fifth" v-for="movie in $store.state.movies.results" :key="movie.id">
           <div class="card">
@@ -22,7 +17,7 @@
               {{movie.overview.slice(0,100)}}...
             </div>
             <div class="card-footer">
-              <router-link :to="`/${movie.id}-${movie.title.split(' ').join('-')}`" class="card-footer-item">Buy</router-link>
+              <router-link :to="`/${movie.id}-${movie.title.split(' ').join('-')}`" class="card-footer-item">More info</router-link>
             </div>
           </div>
         </div>
