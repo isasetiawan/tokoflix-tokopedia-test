@@ -10,8 +10,9 @@
     
       <div class="navbar-end" v-if="$store.state.user">
         <div class="navbar-item">
-          <div class="is-size-5 is-capitalized">
-            {{$store.state.user.name.first}} {{$store.state.user.name.last}}
+          <div>
+            <p class="is-size-4 is-capitalized">{{$store.state.user.name.first}} {{$store.state.user.name.last}}</p>
+            <p class="is-size-7">{{balance | currency}}</p>
           </div>
           <div class="navbar-item" >
             <figure class="image is-24x24">
@@ -27,6 +28,18 @@
 
   </div>
 </template>
+
+<script>
+import { mapState } from 'vuex';
+export default {
+  computed:{
+    ...mapState({
+      balance:state=>state.balance
+    })
+  }
+}
+</script>
+
 
 <style>
   /* .navbar-item img{
