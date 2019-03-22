@@ -4,8 +4,11 @@ import App from './App.vue'
 import 'buefy/dist/buefy.css'
 import router from './router'
 import store from './store'
+import currency from './plugins/currency-filter'
 
 Vue.config.productionTip = false
+
+Vue.filter('currency', currency)
 
 new Vue({
   router,
