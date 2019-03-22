@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import Movie from './views/Movie'
 import store from './store'
 
 Vue.use(Router)
@@ -16,8 +17,11 @@ export default new Router({
         await store.dispatch('loadMovies',{page:to.query.page})
         next()
       },
-      
-      children:[]
+    },
+    {
+      path: '/:movie_id_slug',
+      name:'movie',
+      component: Movie
     }
   ]
 })
