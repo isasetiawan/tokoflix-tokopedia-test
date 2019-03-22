@@ -12,6 +12,7 @@ export default new Vuex.Store({
     cart:[],
     casts:[],
     similarMovies:[],
+    recommendationMovies:[],
     user:null,
     balance:100000,
     isLoading:false
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     setSimilarMovies(state, {movies}){
       state.similarMovies = movies
+    },
+    setRecommendationMovies(state, {movies}){
+      state.recommendationMovies = movies
     }
   },
   actions: {
@@ -125,7 +129,23 @@ export default new Vuex.Store({
           Snackbar.open('Something bad happened')
       }
       commit('setLoading',{isLoading:false})
+    },
+
+    async loadRecommendationMovies({state, commit}){
+      if (!state.movie) return
+      try {
+        commit('setLoading',{isLoading:true})
+        let {data} = await axios.get(`/movie/${state.movie.id}/recommendations`)
+        commit('setRecommendationMovies', {movies:data.results})
+      } catch (error) {
+        if (error.response)
+          Snackbar.open(error.response.status_message)
+        else
+          Snackbar.open('Something bad happened')
+      }
+      commit('setLoading',{isLoading:false})
     }
+
   },
   getters:{
     moviePrice: state => {
