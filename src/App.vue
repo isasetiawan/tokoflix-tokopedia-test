@@ -1,20 +1,36 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <nav class="navbar is-success" role="navigation" >
+      
+      <div class="navbar-start " >
+        <div class="navbar-item title has-text-white">
+          Tokoflix
+        </div>
+      </div>
+    
+      <div class="navbar-end" v-if="$store.state.user">
+        <div class="navbar-item">
+          <div class="is-size-5 is-capitalized">
+            {{$store.state.user.name.first}} {{$store.state.user.name.last}}
+          </div>
+          <div class="navbar-item" >
+            <figure class="image is-24x24">
+              <img class="is-rounded" :src="$store.state.user.picture.thumbnail">
+            </figure>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+
+    <router-view></router-view>
+
   </div>
 </template>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  /* .navbar-item img{
+    width: 48px;
+    height: 48px;
+  } */
 </style>
