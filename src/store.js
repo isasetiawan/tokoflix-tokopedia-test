@@ -11,6 +11,7 @@ export default new Vuex.Store({
     movie:null,
     cart:[],
     casts:[],
+    similarMovies:[],
     user:null,
     balance:100000,
     isLoading:false
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     changeBalance(state,amount){
       state.balance = amount
+    },
+    setSimilarMovies(state, {movies}){
+      state.similarMovies = movies
     }
   },
   actions: {
@@ -106,6 +110,21 @@ export default new Vuex.Store({
       commit('addToCart')
       commit('changeBalance',balance)
       Snackbar.open('Movie Purchased')
+    },
+
+    async loadSimilarMovie({state, commit}){
+      if (!state.movie) return
+      try {
+        commit('setLoading',{isLoading:true})
+        let {data} = await axios.get(`/movie/${state.movie.id}/similar`)
+        commit('setSimilarMovies', {movies:data.results})
+      } catch (error) {
+        if (error.response)
+          Snackbar.open(error.response.status_message)
+        else
+          Snackbar.open('Something bad happened')
+      }
+      commit('setLoading',{isLoading:false})
     }
   },
   getters:{
@@ -121,7 +140,7 @@ export default new Vuex.Store({
     },
 
     movieInCart: state => {
-      return state.cart.includes(state.movie.id)
+      return state.movie ? state.cart.includes(state.movie.id) : false
     }
   }
 })
