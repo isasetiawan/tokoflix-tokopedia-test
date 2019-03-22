@@ -9,6 +9,8 @@ export default new Vuex.Store({
   state: {
     movies:[],
     movie:null,
+    cart:[],
+    casts:[],
     user:null,
     balance:100000,
     isLoading:false
@@ -23,8 +25,18 @@ export default new Vuex.Store({
     setUser(state, {user}){
       state.user = user
     },
+    setCasts(state,{casts}){
+      state.casts = casts
+    },
     setLoading(state, {isLoading}){
       state.isLoading = isLoading
+    },
+    addToCart(state){
+      let {movie, cart} = state
+      cart.push(movie.id)
+    },
+    changeBalance(state,amount){
+      state.balance = amount
     }
   },
   actions: {
@@ -62,6 +74,54 @@ export default new Vuex.Store({
           Snackbar.open('Something bad happened')
       }
       commit('setLoading',{isLoading:false})
+    },
+
+    async loadCasts({commit, state}){
+      if (!state.movie) return
+      try {
+        commit('setLoading',{isLoading:true})
+        let {data} = await axios.get(`/movie/${state.movie.id}/credits`)
+        commit('setCasts', {casts:data.cast})
+      } catch (error) {
+        if (error.response)
+          Snackbar.open(error.response.status_message)
+        else
+          Snackbar.open('Something bad happened')
+      }
+      commit('setLoading',{isLoading:false})
+    },
+
+    // eslint-disable-next-line
+    purchaseMovie({getters, state, commit}){
+      let {balance, cart, movie} = {...state}
+      balance -= getters.moviePrice
+      if (balance < 0) {
+        Snackbar.open("Not enough balance")
+        return
+      }
+      if (cart.includes(movie.id)){
+        Snackbar.open(`Movie "${movie.title}" already purchased`)
+        return
+      }
+      commit('addToCart')
+      commit('changeBalance',balance)
+      Snackbar.open('Movie Purchased')
+    }
+  },
+  getters:{
+    moviePrice: state => {
+      if (!state.movie) return
+      let {vote_average} = state.movie
+      if (vote_average >= 1 && vote_average <= 3) return 3500
+      if (vote_average > 3 && vote_average <= 6) return 8250
+      if (vote_average > 6 && vote_average <= 8) return 16350
+      if (vote_average > 8 && vote_average <= 10) return 21250
+
+      return 0
+    },
+
+    movieInCart: state => {
+      return state.cart.includes(state.movie.id)
     }
   }
 })
