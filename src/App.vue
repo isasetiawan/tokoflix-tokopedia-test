@@ -26,12 +26,19 @@
 
     <router-view></router-view>
 
+    <Loading
+      :is-full-page="true"
+      :active="$store.state.isLoading"
+    />
+
   </div>
 </template>
 
 <script>
+import {Loading} from 'buefy/dist/components/loading'
 import { mapState } from 'vuex';
 export default {
+  components:{Loading},
   computed:{
     ...mapState({
       balance:state=>state.balance
