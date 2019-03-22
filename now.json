@@ -1,0 +1,17 @@
+{
+    "name": "tokoflix-test",
+    "type": "static",
+    "static": {
+      "public": "dist",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "alias": "tokoflix-test",
+    "files": [
+      "dist"
+    ]
+  }
