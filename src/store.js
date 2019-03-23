@@ -144,7 +144,23 @@ export default new Vuex.Store({
           Snackbar.open('Something bad happened')
       }
       commit('setLoading',{isLoading:false})
-    }
+    },
+
+    async searchMovie({commit},{query='', page=1} = {}){
+      commit('setLoading',{isLoading:true})
+      try {
+        let {data} = await axios.get('/search/movie',{params:{
+          page,
+          query:encodeURI(query)
+        }})
+        commit('setMovies', {movies:data})
+
+      } catch (error) {
+        if (error.response)
+          Snackbar.open(error.response.status_message)
+      }
+      commit('setLoading',{isLoading:false})
+    },
 
   },
   getters:{
